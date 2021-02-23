@@ -1,0 +1,15 @@
+{
+"BackupFilesDir": "test/BackupFiles/",
+"RelPathInBackup": "dump",
+"SysDir": "test/sys/",
+"DiffIgnoreFile": "test/diffIgnore",
+"Mail": {
+    "FromAdr":"noreply@example.com",
+    "UserName": "noreply@example.de",
+    "Password": "pwd",
+    "SMTPServer":"smtp.example.com",
+    "SMTPPort":587,
+    "ReceiverAdr":"alice@example.com",
+    "ReceiverName":"Alice"
+    }
+}
