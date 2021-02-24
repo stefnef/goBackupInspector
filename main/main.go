@@ -12,8 +12,14 @@ import (
 
 func main() {
 	var summaryFileName string
-	if err := config.LoadConfiguration("configFile"); err != nil {
-		log.Panic(err)
+	if len(os.Args) != 2 {
+		if err := config.LoadConfiguration("configFile"); err != nil {
+			log.Panic(err)
+		}
+	} else {
+		if err := config.LoadConfiguration(os.Args[1]); err != nil {
+			log.Panic(err)
+		}
 	}
 
 	if err := config.CheckConfig(); err != nil {
@@ -21,7 +27,7 @@ func main() {
 	}
 
 	summary, err := diffs.CreateFileDiff(config.Conf.BackupFilesDir, config.Conf.SysDir,
-										 config.Conf.RelPathInBackup, config.Conf.DiffIgnoreFile)
+		config.Conf.RelPathInBackup, config.Conf.DiffIgnoreFile)
 	if err != nil {
 		log.Panic(err)
 	}
