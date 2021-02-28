@@ -38,7 +38,7 @@ func main() {
 			log.Panic(err)
 		}
 	} else {
-		if summaryFileName, err = template.CreateHTMLFile(&summary, "template/"); err != nil {
+		if summaryFileName, err = template.CreateHTMLFile(&summary, config.Conf.Mail.TemplateDir); err != nil {
 			log.Panic(err)
 		}
 	}

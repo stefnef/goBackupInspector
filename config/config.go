@@ -15,6 +15,7 @@ type MailConfig struct {
 	ReceiverAdr      string `json:"ReceiverAdr"`
 	ReceiverName     string `json:"ReceiverName"`
 	AttachmentFormat string `json:"AttachmentFormat"`
+	TemplateDir      string `json:"TemplateDir"`
 }
 
 type Config struct {

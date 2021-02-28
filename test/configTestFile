@@ -11,6 +11,7 @@
     "SMTPPort":587,
     "ReceiverAdr":"alice@example.com",
     "ReceiverName":"Alice",
-    "AttachmentFormat":"json"
+    "AttachmentFormat":"json",
+    TemplateDir
     }
 }
