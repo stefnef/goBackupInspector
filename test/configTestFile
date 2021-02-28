@@ -12,6 +12,6 @@
     "ReceiverAdr":"alice@example.com",
     "ReceiverName":"Alice",
     "AttachmentFormat":"json",
-    TemplateDir
+    "TemplateDir":"template/"
     }
 }
