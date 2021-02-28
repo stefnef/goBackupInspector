@@ -18,7 +18,7 @@ const chunkSize = 64000
 
 //CreateFileDiff unpacks zip file in <code>dumpDir directory</code> and compares the
 // files between sysDir and the unpacked files
-func CreateFileDiff(backupFilesDir, sysDir, pathInBackup, diffIgnoreFile string) (diffSummary summary.FileDiffSummary, err error){
+func CreateFileDiff(backupFilesDir, sysDir, pathInBackup, diffIgnoreFile string) (diffSummary summary.FileDiffSummary, err error) {
 	backupFilesDir = changeSuffix(backupFilesDir)
 	sysDir = changeSuffix(sysDir)
 	pathInBackup = changeSuffix(pathInBackup)
@@ -45,31 +45,39 @@ func CreateFileDiff(backupFilesDir, sysDir, pathInBackup, diffIgnoreFile string)
 		return
 	}
 
-	diffSummary = fileDiff(unpackDirectory + pathInBackup, sysDir, diffIgnoreFile)
+	diffSummary = fileDiff(unpackDirectory+pathInBackup, sysDir, diffIgnoreFile)
 	diffSummary.BackupFileName = backupFile
 	return
 }
 
-func changeSuffix(directory string) string{
+func changeSuffix(directory string) string {
 	if !strings.HasSuffix(directory, "/") {
 		directory += "/"
 	}
 	return directory
 }
 
-func fileDiff(dumpDir, sysDir, diffIgnoreFile string) (diffSummary summary.FileDiffSummary){
-	ignoreItems,_ := readDiffIgnore(diffIgnoreFile)
-	ignoreRegex,_ := createIgnoreRegex(ignoreItems)
+func fileDiff(dumpDir, sysDir, diffIgnoreFile string) (diffSummary summary.FileDiffSummary) {
+	ignoreItems, _ := readDiffIgnore(diffIgnoreFile)
+	ignoreRegex, _ := createIgnoreRegex(ignoreItems)
 
 	dumpFiles, dirsInDump, ignoredElements := createFileDirChecklist(dumpDir, ignoreRegex)
 	sysFiles, dirsInSys, ignoredElementsSys := createFileDirChecklist(sysDir, ignoreRegex)
 	ignoredElements = append(ignoredElements, ignoredElementsSys...)
 
 	// compare dumpFiles vs. sysFiles
-	diffSummary = summary.FileDiffSummary{ LeftDir: dumpDir, RightDir: sysDir, FilesNotInDir: map[string][]string{},
-											DirectoriesNotInDir: map[string][]string{},
-											ComparedFiles: []summary.FileTuple{}, UnequalFiles: []summary.FileTuple{},
-											IgnoredElement: ignoredElements}
+	diffSummary = summary.FileDiffSummary{LeftDir: dumpDir, RightDir: sysDir,
+		Date: time.Now(),
+		FilesNotInDir: map[string][]string{
+			dumpDir: make([]string, 0),
+			sysDir:  make([]string, 0),
+		},
+		DirectoriesNotInDir: map[string][]string{
+			dumpDir: make([]string, 0),
+			sysDir:  make([]string, 0),
+		},
+		ComparedFiles: []summary.FileTuple{}, UnequalFiles: []summary.FileTuple{},
+		IgnoredElement: ignoredElements}
 	diffSummary.ComparedFiles, diffSummary.FilesNotInDir[sysDir] = findCuts(dumpDir, dumpFiles, sysDir, sysFiles)
 	_, diffSummary.FilesNotInDir[dumpDir] = findCuts(sysDir, sysFiles, dumpDir, dumpFiles)
 	_, diffSummary.DirectoriesNotInDir[sysDir] = findCuts(dumpDir, dirsInDump, sysDir, dirsInSys)
@@ -130,7 +138,9 @@ func deepCompare(file1, file2 string) bool {
 	}
 }
 
-func findCuts(leftRootDir string, leftFilesNames []string, rightRootDir string, rightFileNames []string)  (filesToCompare []summary.FileTuple, filesNotInRightDir []string){
+func findCuts(leftRootDir string, leftFilesNames []string, rightRootDir string, rightFileNames []string) (filesToCompare []summary.FileTuple, filesNotInRightDir []string) {
+	filesToCompare = make([]summary.FileTuple, 0)
+	filesNotInRightDir = make([]string, 0)
 	for _, leftFile := range leftFilesNames {
 		if rightFile := findFileWithName(leftFile, leftRootDir, rightFileNames, rightRootDir); rightFile != "" {
 			filesToCompare = append(filesToCompare, summary.FileTuple{LeftFile: leftFile, RightFile: rightFile})
@@ -189,8 +199,8 @@ func isIgnored(name string, ignoreRegex []*regexp.Regexp) (bool, string) {
 }
 
 func createFileDirChecklist(root string, ignoreRegex []*regexp.Regexp) (files, directories []string,
-																		ignoredElements []summary.IgnoredElement) {
-	ignoredElements = make([]summary.IgnoredElement,0)
+	ignoredElements []summary.IgnoredElement) {
+	ignoredElements = make([]summary.IgnoredElement, 0)
 	// filepath.Walk
 	filesAll, directoriesAll, err := filePathWalkDir(root)
 	if err != nil {
@@ -207,7 +217,7 @@ func createFileDirChecklist(root string, ignoreRegex []*regexp.Regexp) (files, d
 	for _, dir := range directoriesAll {
 		if ignore, ruleName := isIgnored(dir, ignoreRegex); ignore {
 			ignoredElements = append(ignoredElements, summary.IgnoredElement{IgnoredElement: dir, CausedRule: ruleName})
-		} else if ignoreWithSlash, ruleNameSlash := isIgnored(dir + "/", ignoreRegex); ignoreWithSlash {
+		} else if ignoreWithSlash, ruleNameSlash := isIgnored(dir+"/", ignoreRegex); ignoreWithSlash {
 			ignoredElements = append(ignoredElements, summary.IgnoredElement{IgnoredElement: dir, CausedRule: ruleNameSlash})
 		} else {
 			directories = append(directories, dir)
@@ -216,7 +226,7 @@ func createFileDirChecklist(root string, ignoreRegex []*regexp.Regexp) (files, d
 	return
 }
 
-func filePathWalkDir(root string) (files []string, directories []string,err error) {
+func filePathWalkDir(root string) (files []string, directories []string, err error) {
 	//var files []string
 	err = filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
 		if !info.IsDir() {

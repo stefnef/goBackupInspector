@@ -10,6 +10,7 @@
     "SMTPServer":"smtp.example.com",
     "SMTPPort":587,
     "ReceiverAdr":"alice@example.com",
-    "ReceiverName":"Alice"
+    "ReceiverName":"Alice",
+    "AttachmentFormat":"json"
     }
 }

@@ -1,27 +1,31 @@
 package summary
 
-import "reflect"
+import (
+	"reflect"
+	"time"
+)
 
 type FileTuple struct {
-	LeftFile string `json:"left_file"`
+	LeftFile  string `json:"left_file"`
 	RightFile string `json:"right_file"`
 }
 
 type IgnoredElement struct {
 	IgnoredElement string `json:"IgnoredElement"`
-	CausedRule string `json:"CausedRule"`
+	CausedRule     string `json:"CausedRule"`
 }
 
 type FileDiffSummary struct {
-	LeftDir string	`json:"LeftDir"`
-	RightDir string `json:"RightDir"`
-	FilesNotInDir map[string][]string `json:"FilesNotInDir"`
+	Date                time.Time           `json:"Date"`
+	LeftDir             string              `json:"LeftDir"`
+	RightDir            string              `json:"RightDir"`
+	FilesNotInDir       map[string][]string `json:"FilesNotInDir"`
 	DirectoriesNotInDir map[string][]string `json:"DirectoriesNotInDir"`
-	ComparedFiles []FileTuple `json:"ComparedFiles"`
-	IgnoredElement[]IgnoredElement `json:"IgnoredElements"`
-	UnequalFiles []FileTuple `json:"UnequalFiles"`
-	WithDifferences bool	`json:"WithDifferences"`
-	BackupFileName string   `json:"BackupFileName"`
+	ComparedFiles       []FileTuple         `json:"ComparedFiles"`
+	IgnoredElement      []IgnoredElement    `json:"IgnoredElements"` //TODO plural
+	UnequalFiles        []FileTuple         `json:"UnequalFiles"`
+	WithDifferences     bool                `json:"WithDifferences"`
+	BackupFileName      string              `json:"BackupFileName"`
 }
 
 func (ft FileTuple) Compare(other FileTuple) int {
@@ -67,7 +71,7 @@ func (ignore IgnoredElement) Compare(other IgnoredElement) int {
 }
 
 func CompareIgnoredElements(act, exp []IgnoredElement) int {
-	if len(act) != len(exp){
+	if len(act) != len(exp) {
 		return -1
 	}
 

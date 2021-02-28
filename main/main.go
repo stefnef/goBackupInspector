@@ -1,13 +1,11 @@
 package main
 
 import (
-	"encoding/json"
 	"goBackupInspector/config"
 	"goBackupInspector/diffs"
-	"io/ioutil"
+	"goBackupInspector/template"
 	"log"
 	"os"
-	"time"
 )
 
 func main() {
@@ -35,11 +33,17 @@ func main() {
 		return
 	}
 
-	summaryFileName = "diffSummary_" + time.Now().Format("2006_01_02") + ".json"
-	file, _ := json.MarshalIndent(summary, "", "\t")
-	_ = ioutil.WriteFile(summaryFileName, file, 0644)
+	if config.Conf.Mail.AttachmentFormat == "json" {
+		if summaryFileName, err = template.CreateJsonFile(&summary); err != nil {
+			log.Panic(err)
+		}
+	} else {
+		if summaryFileName, err = template.CreateHTMLFile(&summary, "template/"); err != nil {
+			log.Panic(err)
+		}
+	}
 	defer func() {
-		if err := os.Remove(summaryFileName); err != nil {
+		if err = os.Remove(summaryFileName); err != nil {
 			log.Fatal(err)
 		}
 	}()
