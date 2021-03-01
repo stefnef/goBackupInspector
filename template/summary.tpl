@@ -22,60 +22,60 @@
         <h2>Missing Files/Directories</h2>
         <div class="col-sm-6">
             <div class="container-fluid">
-                <h3>{{ .LeftDir }}</h3>
+                <h3>Backup directory: {{ .LeftDir }}</h3>
                 <div class="container-fluid" data-toggle="collapse" data-target="#MissingFilesLeft">
                     {{ if gt $lengthFilesNotInLeftDir 0 }}
-                        <h4>These files are missing in {{ .LeftDir }}</h4>
+                        <h4>These files are missing in backup</h4>
                         <ul class="list-group  collapse in"  id="MissingFilesLeft">
                         {{ range ShowFilesNotInLeftDir .}}
                             <li class="list-group-item">{{ . }}</li>
                         {{end}}
                         </ul>
                     {{else}}
-                        <h4>No files are missing in {{ .LeftDir }}</h4>
+                        <h4>No files are missing in backup!</h4>
                     {{end}}
                 </div>
 
                 <div class="container-fluid" data-toggle="collapse" data-target="#MissingDirsLeft">
                     {{ if gt $lengthDirsNotInLeftDir 0 }}
-                        <h4>These directories are missing in {{ .LeftDir }}</h4>
+                        <h4>These directories are missing in backup</h4>
                         <ul class="list-group  collapse in"  id="MissingDirsLeft">
                             {{ range ShowDirsNotInLeftDir .}}
                                 <li class="list-group-item">{{ . }}</li>
                             {{end}}
                         </ul>
                     {{else}}
-                        <h4>No directories are missing in {{ .LeftDir }}</h4>
+                        <h4>No directories are missing in backup!</h4>
                     {{end}}
                 </div>
             </div>
         </div>
         <div class="col-sm-6">
             <div class="container-fluid">
-                <h3>{{ .RightDir }}</h3>
+                <h3>System directory: {{ .RightDir }}</h3>
                 <div class="container-fluid" data-toggle="collapse" data-target="#MissingFilesRight">
                     {{ if gt $lengthFilesNotInRightDir 0 }}
-                        <h4>These files are missing in {{ .RightDir }}</h4>
+                        <h4>These files are missing in current system</h4>
                         <ul class="list-group  collapse in"  id="MissingFilesRight">
                             {{ range ShowFilesNotInRightDir .}}
                                 <li class="list-group-item">{{ . }}</li>
                             {{end}}
                         </ul>
                     {{else}}
-                        <h4>No files are missing in {{ .RightDir }}</h4>
+                        <h4>No files are missing in current system!</h4>
                     {{end}}
                 </div>
 
                 <div class="container-fluid" data-toggle="collapse" data-target="#MissingDirsRight">
                     {{ if gt $lengthDirsNotInRightDir 0 }}
-                        <h4>These directories are missing in {{ .RightDir }}</h4>
+                        <h4>These directories are missing in current system</h4>
                         <ul class="list-group  collapse in"  id="MissingDirsRight">
                             {{ range ShowDirsNotInRightDir .}}
                                 <li class="list-group-item">{{ . }}</li>
                             {{end}}
                         </ul>
                     {{else}}
-                        <h4>No directories are missing in {{ .RightDir }}</h4>
+                        <h4>No directories are missing in current system!</h4>
                     {{end}}
                 </div>
             </div>
@@ -88,11 +88,11 @@
                 <h2 data-toggle="collapse" data-target="#UnequalFiles">Unequal files:</h2>
                 <ul class="list-group  collapse in"  id="UnequalFiles">
                     {{ range .UnequalFiles }}
-                        <li class="list-group-item">{{ . }}</li>
+                        <li class="list-group-item">{{ LeftWithoutPath . }}</li>
                     {{end}}
                 </ul>
             {{else}}
-                <h2>No Unequal Files Found!</h2>
+                <h2>No unequal files found!</h2>
             {{end}}
         </div>
     </div>
@@ -101,7 +101,7 @@
         <div class="container-fluid">
             {{ if gt $lengthIgnoredElements 0 }}
             <h2 data-toggle="collapse" data-target="#IgnoredElements">Ignored elements:</h2>
-            <ul class="list-group  collapse in"  id="IgnoredElements">
+            <ul class="list-group  collapse"  id="IgnoredElements">
                 {{ range .IgnoredElement }}
                     <li class="list-group-item">{{ . }}</li>
                 {{end}}
@@ -118,7 +118,7 @@
                 <h2 data-toggle="collapse" data-target="#ComparedFiles">Compared Files:</h2>
                 <ul class="list-group  collapse"  id="ComparedFiles">
                     {{ range .ComparedFiles }}
-                        <li class="list-group-item">{{ . }}</li>
+                        <li class="list-group-item">{{ LeftWithoutPath . }}</li>
                     {{end}}
                 </ul>
             {{else}}

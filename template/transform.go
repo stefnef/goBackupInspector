@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"io/ioutil"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -26,6 +27,9 @@ func CreateHTMLFile(sum *summary.FileDiffSummary, templatePath string) (fileName
 		},
 		"ShowDirsNotInRightDir": func(innerSum summary.FileDiffSummary) []string {
 			return innerSum.DirectoriesNotInDir[innerSum.RightDir]
+		},
+		"LeftWithoutPath": func(tuple summary.FileTuple) string {
+			return strings.TrimPrefix(tuple.LeftFile, sum.LeftDir)
 		},
 	}).ParseFiles(templatePath+"summary.tpl", templatePath+"header.tpl",
 		templatePath+"footer.tpl", templatePath+"notInDir.tpl")
