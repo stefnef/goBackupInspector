@@ -43,7 +43,7 @@ func main() {
 	if err != nil {
 		log.Panic(err)
 	}
-	if !summary.WithDifferences || !notify.WithUserNotification(summary, config.Conf.SummaryDir) {
+	if !notify.WithUserNotification(summary, config.Conf.SummaryDir) {
 		log.Print("summary created but not sent")
 		return
 	}

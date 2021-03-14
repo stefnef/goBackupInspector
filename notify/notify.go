@@ -11,6 +11,9 @@ import (
 const summaryFileName = "lastSummary.json"
 
 func WithUserNotification(sum summary.FileDiffSummary, sumPath string) bool {
+	if !sum.WithDifferences {
+		return false
+	}
 	f, err := os.Open(sumPath + "/" + summaryFileName)
 	if err != nil && os.IsNotExist(err) {
 		return true
