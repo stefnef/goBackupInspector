@@ -1,4 +1,4 @@
-package main
+package notify
 
 import (
 	"fmt"
@@ -7,8 +7,8 @@ import (
 	"log"
 )
 
-func sendMail(body string, summary string, conf config.Config) {
-	d := gomail.NewDialer(conf.Mail.SMTPServer, conf.Mail.SMTPPort, conf.Mail.UserName, conf.Mail.Password ) //"efzoipefzsfiaefozif/QWUais")
+func SendMail(body string, summary string, conf config.Config) {
+	d := gomail.NewDialer(conf.Mail.SMTPServer, conf.Mail.SMTPPort, conf.Mail.UserName, conf.Mail.Password) //"efzoipefzsfiaefozif/QWUais")
 	s, err := d.Dial()
 	if err != nil {
 		panic(err)

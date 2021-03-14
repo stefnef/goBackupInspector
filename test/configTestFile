@@ -3,6 +3,7 @@
 "RelPathInBackup": "dump",
 "SysDir": "test/sys/",
 "DiffIgnoreFile": "test/diffIgnore",
+"SummaryDir": "test/summary",
 "Mail": {
     "FromAdr":"noreply@example.com",
     "UserName": "noreply@example.de",

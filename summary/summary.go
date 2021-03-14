@@ -5,6 +5,25 @@ import (
 	"time"
 )
 
+type Difference int
+
+const (
+	Equal Difference = iota
+	LeftDir
+	RightDir
+	FilesNotInDir
+	DirectoriesNotInDir
+	ComparedFiles
+	UnequalFiles
+	IgnoredFiles
+	WithDifferences
+	BackupFiles
+)
+
+func (d Difference) i() int {
+	return int(d)
+}
+
 type FileTuple struct {
 	LeftFile  string `json:"left_file"`
 	RightFile string `json:"right_file"`
@@ -85,30 +104,33 @@ func CompareIgnoredElements(act, exp []IgnoredElement) int {
 
 func (sum FileDiffSummary) Compare(other FileDiffSummary) int {
 	if sum.LeftDir != other.LeftDir {
-		return 1
+		return LeftDir.i()
 	}
 	if sum.RightDir != other.RightDir {
-		return 2
+		return RightDir.i()
 	}
 	if eq := reflect.DeepEqual(sum.FilesNotInDir, other.FilesNotInDir); !eq {
-		return 3
+		return FilesNotInDir.i()
 	}
 	if eq := reflect.DeepEqual(sum.DirectoriesNotInDir, other.DirectoriesNotInDir); !eq {
-		return 4
+		return DirectoriesNotInDir.i()
 	}
 	if Compare(sum.ComparedFiles, other.ComparedFiles) != 0 {
-		return 5
+		return ComparedFiles.i()
 	}
 	if Compare(sum.UnequalFiles, other.UnequalFiles) != 0 {
-		return 6
+		return UnequalFiles.i()
 	}
 	if CompareIgnoredElements(sum.IgnoredElement, other.IgnoredElement) != 0 {
-		return 7
+		return IgnoredFiles.i()
 	}
 	if sum.WithDifferences != other.WithDifferences {
-		return 8
+		return WithDifferences.i()
 	}
-	return 0
+	if sum.BackupFileName != other.BackupFileName {
+		return BackupFiles.i()
+	}
+	return Equal.i()
 }
 
 func (sum FileDiffSummary) HasDifferences() bool {

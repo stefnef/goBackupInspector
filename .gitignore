@@ -16,4 +16,5 @@
 
 .idea
 configFile
-
+*.json
+*.log

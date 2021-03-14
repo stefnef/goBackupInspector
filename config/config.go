@@ -23,6 +23,7 @@ type Config struct {
 	RelPathInBackup string     `json:RelPathInBackup`
 	SysDir          string     `json:"SysDir"`
 	DiffIgnoreFile  string     `json:"DiffIgnoreFile"`
+	SummaryDir      string     `json:"SummaryDir"` // todo suffix slash
 	Mail            MailConfig `json:"Mail"`
 }
 
@@ -60,5 +61,12 @@ func CheckConfig() error {
 								The path of your ignore file is wrong
 								(` + Conf.DiffIgnoreFile + `)`)
 	}
+
+	if _, err := os.Open(Conf.SummaryDir); err != nil && os.IsNotExist(err) {
+		return errors.New(`error in config file: 
+								The path of your summary folder is wrong
+								(` + Conf.SummaryDir + `)`)
+	}
+
 	return nil
 }
