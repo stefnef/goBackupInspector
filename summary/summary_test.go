@@ -5,40 +5,40 @@ import "testing"
 func TestCompare(t *testing.T) {
 	diffSummary := FileDiffSummary{LeftDir: "NotEqual"}
 	other := FileDiffSummary{LeftDir: "../test/dump"}
-	assertCompare(diffSummary, other, LeftDir.i(), t)
+	assertCompare(diffSummary, other, DiffLeftDir.i(), t)
 
 	other.LeftDir = diffSummary.LeftDir
 	diffSummary.RightDir = "RightDir"
 	other.RightDir = "other"
-	assertCompare(diffSummary, other, RightDir.i(), t)
+	assertCompare(diffSummary, other, DiffRightDir.i(), t)
 
 	other.RightDir = diffSummary.RightDir
-	diffSummary.FilesNotInDir = map[string][]string{"left": {"Not in dir"}}
-	assertCompare(diffSummary, other, FilesNotInDir.i(), t)
+	diffSummary.FilesNotInDir = map[string][]string{DirBackup: {"Not in dir"}}
+	assertCompare(diffSummary, other, DiffFilesNotInDir.i(), t)
 
 	other.FilesNotInDir = diffSummary.FilesNotInDir
 	diffSummary.DirectoriesNotInDir = map[string][]string{"left": {"not in dir"}}
-	assertCompare(diffSummary, other, DirectoriesNotInDir.i(), t)
+	assertCompare(diffSummary, other, DiffDirectoriesNotInDir.i(), t)
 
 	other.DirectoriesNotInDir = diffSummary.DirectoriesNotInDir
 	diffSummary.ComparedFiles = []FileTuple{{LeftFile: "left", RightFile: "right"}}
-	assertCompare(diffSummary, other, ComparedFiles.i(), t)
+	assertCompare(diffSummary, other, DiffComparedFiles.i(), t)
 
 	other.ComparedFiles = diffSummary.ComparedFiles
 	diffSummary.UnequalFiles = []FileTuple{{LeftFile: "left", RightFile: "right"}}
-	assertCompare(diffSummary, other, UnequalFiles.i(), t)
+	assertCompare(diffSummary, other, DiffUnequalFiles.i(), t)
 
 	other.UnequalFiles = diffSummary.UnequalFiles
 	diffSummary.IgnoredElement = []IgnoredElement{{IgnoredElement: "file", CausedRule: "rule"}}
-	assertCompare(diffSummary, other, IgnoredFiles.i(), t)
+	assertCompare(diffSummary, other, DiffIgnoredFiles.i(), t)
 
 	other.IgnoredElement = diffSummary.IgnoredElement
 	diffSummary.WithDifferences = true
-	assertCompare(diffSummary, other, WithDifferences.i(), t)
+	assertCompare(diffSummary, other, DiffWithDifferences.i(), t)
 
 	other.WithDifferences = diffSummary.WithDifferences
 	diffSummary.BackupFileName = "backup file name"
-	assertCompare(diffSummary, other, BackupFiles.i(), t)
+	assertCompare(diffSummary, other, DiffBackupFiles.i(), t)
 
 	other.BackupFileName = diffSummary.BackupFileName
 	assertCompare(diffSummary, other, Equal.i(), t)

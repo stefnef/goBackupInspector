@@ -144,11 +144,11 @@ func TestFileDiff(t *testing.T) {
 		LeftDir:  "../test/dump",
 		RightDir: "../test/sys",
 		FilesNotInDir: map[string][]string{
-			"../test/dump": {"../test/sys/dir2/dir5/f7.txt", "../test/sys/dir4/f10.txt"},
-			"../test/sys":  {"../test/dump/dir3/f4.txt"}},
+			summary.DirBackup: {"../test/sys/dir2/dir5/f7.txt", "../test/sys/dir4/f10.txt"},
+			summary.DirSystem: {"../test/dump/dir3/f4.txt"}},
 		DirectoriesNotInDir: map[string][]string{
-			"../test/dump": {"../test/sys/dir4"},
-			"../test/sys":  []string{},
+			summary.DirBackup: {"../test/sys/dir4"},
+			summary.DirSystem: []string{},
 		},
 		ComparedFiles: []summary.FileTuple{
 			{LeftFile: "../test/dump/dir1/dir4/f5.txt", RightFile: "../test/sys/dir1/dir4/f5.txt"},

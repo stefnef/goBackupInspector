@@ -16,17 +16,17 @@ func CreateHTMLFile(sum *summary.FileDiffSummary, templatePath string) (fileName
 	//tpl = template.Must(template.ParseFiles("summary.tpl", "header.tpl", "footer.tpl", "notInDir.tpl"))
 	tpl, err = template.New("new.gohtml").Funcs(template.FuncMap{
 		"ShowFilesNotInLeftDir": func(innerSum summary.FileDiffSummary) []string {
-			return innerSum.FilesNotInDir[innerSum.LeftDir]
+			return innerSum.FilesNotInDir[summary.DirBackup]
 		},
 		"ShowFilesNotInRightDir": func(innerSum summary.FileDiffSummary) []string {
-			return innerSum.FilesNotInDir[innerSum.RightDir]
+			return innerSum.FilesNotInDir[summary.DirSystem]
 		},
 
 		"ShowDirsNotInLeftDir": func(innerSum summary.FileDiffSummary) []string {
-			return innerSum.DirectoriesNotInDir[innerSum.LeftDir]
+			return innerSum.DirectoriesNotInDir[summary.DirBackup]
 		},
 		"ShowDirsNotInRightDir": func(innerSum summary.FileDiffSummary) []string {
-			return innerSum.DirectoriesNotInDir[innerSum.RightDir]
+			return innerSum.DirectoriesNotInDir[summary.DirSystem]
 		},
 		"LeftWithoutPath": func(tuple summary.FileTuple) string {
 			return strings.TrimPrefix(tuple.LeftFile, sum.LeftDir)

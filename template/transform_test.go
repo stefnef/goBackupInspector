@@ -32,11 +32,11 @@ func createExampleSummary() *summary.FileDiffSummary {
 		LeftDir:  "LeftDir",
 		RightDir: "RightDir",
 		FilesNotInDir: map[string][]string{
-			"LeftDir":  {"../File1", "../File2"},
-			"RightDir": {"../../Right3"}},
+			summary.DirBackup: {"../File1", "../File2"},
+			summary.DirSystem: {"../../Right3"}},
 		DirectoriesNotInDir: map[string][]string{
-			"LeftDir":  {"../Dir1", "../Dir2"},
-			"RightDir": {"../../Dir3"}},
+			summary.DirBackup: {"../Dir1", "../Dir2"},
+			summary.DirSystem: {"../../Dir3"}},
 		ComparedFiles: []summary.FileTuple{
 			{LeftFile: "Left1", RightFile: "Right1"}, {LeftFile: "Left2", RightFile: "Right2"},
 		},

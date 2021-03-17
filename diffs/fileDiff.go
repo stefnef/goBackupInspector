@@ -69,19 +69,19 @@ func fileDiff(dumpDir, sysDir, diffIgnoreFile string) (diffSummary summary.FileD
 	diffSummary = summary.FileDiffSummary{LeftDir: dumpDir, RightDir: sysDir,
 		Date: time.Now(),
 		FilesNotInDir: map[string][]string{
-			dumpDir: make([]string, 0),
-			sysDir:  make([]string, 0),
+			summary.DirBackup: make([]string, 0),
+			summary.DirSystem: make([]string, 0),
 		},
 		DirectoriesNotInDir: map[string][]string{
-			dumpDir: make([]string, 0),
-			sysDir:  make([]string, 0),
+			summary.DirBackup: make([]string, 0),
+			summary.DirSystem: make([]string, 0),
 		},
 		ComparedFiles: []summary.FileTuple{}, UnequalFiles: []summary.FileTuple{},
 		IgnoredElement: ignoredElements}
-	diffSummary.ComparedFiles, diffSummary.FilesNotInDir[sysDir] = findCuts(dumpDir, dumpFiles, sysDir, sysFiles)
-	_, diffSummary.FilesNotInDir[dumpDir] = findCuts(sysDir, sysFiles, dumpDir, dumpFiles)
-	_, diffSummary.DirectoriesNotInDir[sysDir] = findCuts(dumpDir, dirsInDump, sysDir, dirsInSys)
-	_, diffSummary.DirectoriesNotInDir[dumpDir] = findCuts(sysDir, dirsInSys, dumpDir, dirsInDump)
+	diffSummary.ComparedFiles, diffSummary.FilesNotInDir[summary.DirSystem] = findCuts(dumpDir, dumpFiles, sysDir, sysFiles)
+	_, diffSummary.FilesNotInDir[summary.DirBackup] = findCuts(sysDir, sysFiles, dumpDir, dumpFiles)
+	_, diffSummary.DirectoriesNotInDir[summary.DirSystem] = findCuts(dumpDir, dirsInDump, sysDir, dirsInSys)
+	_, diffSummary.DirectoriesNotInDir[summary.DirBackup] = findCuts(sysDir, dirsInSys, dumpDir, dirsInDump)
 	diffSummary.UnequalFiles = compareFiles(diffSummary.ComparedFiles)
 	diffSummary.WithDifferences = diffSummary.HasDifferences()
 	return

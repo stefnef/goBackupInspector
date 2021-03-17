@@ -9,15 +9,20 @@ type Difference int
 
 const (
 	Equal Difference = iota
-	LeftDir
-	RightDir
-	FilesNotInDir
-	DirectoriesNotInDir
-	ComparedFiles
-	UnequalFiles
-	IgnoredFiles
-	WithDifferences
-	BackupFiles
+	DiffLeftDir
+	DiffRightDir
+	DiffFilesNotInDir
+	DiffDirectoriesNotInDir
+	DiffComparedFiles
+	DiffUnequalFiles
+	DiffIgnoredFiles
+	DiffWithDifferences
+	DiffBackupFiles
+)
+
+const (
+	DirBackup string = "Backup"
+	DirSystem string = "System"
 )
 
 func (d Difference) i() int {
@@ -104,45 +109,45 @@ func CompareIgnoredElements(act, exp []IgnoredElement) int {
 
 func (sum FileDiffSummary) Compare(other FileDiffSummary) int {
 	if sum.LeftDir != other.LeftDir {
-		return LeftDir.i()
+		return DiffLeftDir.i()
 	}
 	if sum.RightDir != other.RightDir {
-		return RightDir.i()
+		return DiffRightDir.i()
 	}
 	if eq := reflect.DeepEqual(sum.FilesNotInDir, other.FilesNotInDir); !eq {
-		return FilesNotInDir.i()
+		return DiffFilesNotInDir.i()
 	}
 	if eq := reflect.DeepEqual(sum.DirectoriesNotInDir, other.DirectoriesNotInDir); !eq {
-		return DirectoriesNotInDir.i()
+		return DiffDirectoriesNotInDir.i()
 	}
 	if Compare(sum.ComparedFiles, other.ComparedFiles) != 0 {
-		return ComparedFiles.i()
+		return DiffComparedFiles.i()
 	}
 	if Compare(sum.UnequalFiles, other.UnequalFiles) != 0 {
-		return UnequalFiles.i()
+		return DiffUnequalFiles.i()
 	}
 	if CompareIgnoredElements(sum.IgnoredElement, other.IgnoredElement) != 0 {
-		return IgnoredFiles.i()
+		return DiffIgnoredFiles.i()
 	}
 	if sum.WithDifferences != other.WithDifferences {
-		return WithDifferences.i()
+		return DiffWithDifferences.i()
 	}
 	if sum.BackupFileName != other.BackupFileName {
-		return BackupFiles.i()
+		return DiffBackupFiles.i()
 	}
 	return Equal.i()
 }
 
 func (sum FileDiffSummary) HasDifferences() bool {
-	if len(sum.DirectoriesNotInDir[sum.LeftDir]) != 0 ||
-		len(sum.DirectoriesNotInDir[sum.RightDir]) != 0 {
+	if len(sum.DirectoriesNotInDir[DirBackup]) != 0 ||
+		len(sum.DirectoriesNotInDir[DirSystem]) != 0 {
 		return true
 	}
 	if len(sum.UnequalFiles) != 0 {
 		return true
 	}
-	if len(sum.FilesNotInDir[sum.LeftDir]) != 0 ||
-		len(sum.FilesNotInDir[sum.RightDir]) != 0 {
+	if len(sum.FilesNotInDir[DirBackup]) != 0 ||
+		len(sum.FilesNotInDir[DirSystem]) != 0 {
 		return true
 	}
 	return false
