@@ -45,7 +45,7 @@ type FileDiffSummary struct {
 	RightDir            string              `json:"RightDir"`
 	FilesNotInDir       map[string][]string `json:"FilesNotInDir"`
 	DirectoriesNotInDir map[string][]string `json:"DirectoriesNotInDir"`
-	ComparedFiles       []FileTuple         `json:"ComparedFiles"`
+	ComparedFiles       []string            `json:"ComparedFiles"`
 	IgnoredElement      []IgnoredElement    `json:"IgnoredElements"` //TODO plural
 	UnequalFiles        []FileTuple         `json:"UnequalFiles"`
 	WithDifferences     bool                `json:"WithDifferences"`
@@ -120,7 +120,7 @@ func (sum FileDiffSummary) Compare(other FileDiffSummary) int {
 	if eq := reflect.DeepEqual(sum.DirectoriesNotInDir, other.DirectoriesNotInDir); !eq {
 		return DiffDirectoriesNotInDir.i()
 	}
-	if Compare(sum.ComparedFiles, other.ComparedFiles) != 0 {
+	if eq := reflect.DeepEqual(sum.ComparedFiles, other.ComparedFiles); !eq {
 		return DiffComparedFiles.i()
 	}
 	if Compare(sum.UnequalFiles, other.UnequalFiles) != 0 {

@@ -21,7 +21,7 @@ func TestCompare(t *testing.T) {
 	assertCompare(diffSummary, other, DiffDirectoriesNotInDir.i(), t)
 
 	other.DirectoriesNotInDir = diffSummary.DirectoriesNotInDir
-	diffSummary.ComparedFiles = []FileTuple{{LeftFile: "left", RightFile: "right"}}
+	diffSummary.ComparedFiles = []string{"leftFile", "rightFile"}
 	assertCompare(diffSummary, other, DiffComparedFiles.i(), t)
 
 	other.ComparedFiles = diffSummary.ComparedFiles

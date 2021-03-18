@@ -118,7 +118,7 @@
                 <h2 data-toggle="collapse" data-target="#ComparedFiles">Compared Files:</h2>
                 <ul class="list-group  collapse"  id="ComparedFiles">
                     {{ range .ComparedFiles }}
-                        <li class="list-group-item">{{ LeftWithoutPath . }}</li>
+                        <li class="list-group-item">{{ . }}</li>
                     {{end}}
                 </ul>
             {{else}}

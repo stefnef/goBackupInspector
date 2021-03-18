@@ -37,9 +37,7 @@ func createExampleSummary() *summary.FileDiffSummary {
 		DirectoriesNotInDir: map[string][]string{
 			summary.DirBackup: {"../Dir1", "../Dir2"},
 			summary.DirSystem: {"../../Dir3"}},
-		ComparedFiles: []summary.FileTuple{
-			{LeftFile: "Left1", RightFile: "Right1"}, {LeftFile: "Left2", RightFile: "Right2"},
-		},
+		ComparedFiles: []string{"Left1", "Left2"},
 		IgnoredElement: []summary.IgnoredElement{
 			{IgnoredElement: "Ign1", CausedRule: "Cause1"}, {IgnoredElement: "Ignore2", CausedRule: "C2"},
 		},

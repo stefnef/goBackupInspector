@@ -58,6 +58,7 @@ func changeSuffix(directory string) string {
 }
 
 func fileDiff(dumpDir, sysDir, diffIgnoreFile string) (diffSummary summary.FileDiffSummary) {
+	var filesToCompare []summary.FileTuple
 	ignoreItems, _ := readDiffIgnore(diffIgnoreFile)
 	ignoreRegex, _ := createIgnoreRegex(ignoreItems)
 
@@ -76,19 +77,20 @@ func fileDiff(dumpDir, sysDir, diffIgnoreFile string) (diffSummary summary.FileD
 			summary.DirBackup: make([]string, 0),
 			summary.DirSystem: make([]string, 0),
 		},
-		ComparedFiles: []summary.FileTuple{}, UnequalFiles: []summary.FileTuple{},
+		ComparedFiles: []string{}, UnequalFiles: []summary.FileTuple{},
 		IgnoredElement: ignoredElements}
-	diffSummary.ComparedFiles, diffSummary.FilesNotInDir[summary.DirSystem] = findCuts(dumpDir, dumpFiles, sysDir, sysFiles)
+	filesToCompare, diffSummary.FilesNotInDir[summary.DirSystem] = findCuts(dumpDir, dumpFiles, sysDir, sysFiles)
 	_, diffSummary.FilesNotInDir[summary.DirBackup] = findCuts(sysDir, sysFiles, dumpDir, dumpFiles)
 	_, diffSummary.DirectoriesNotInDir[summary.DirSystem] = findCuts(dumpDir, dirsInDump, sysDir, dirsInSys)
 	_, diffSummary.DirectoriesNotInDir[summary.DirBackup] = findCuts(sysDir, dirsInSys, dumpDir, dirsInDump)
-	diffSummary.UnequalFiles = compareFiles(diffSummary.ComparedFiles)
+	diffSummary.UnequalFiles, diffSummary.ComparedFiles = compareFiles(dumpDir, filesToCompare)
 	diffSummary.WithDifferences = diffSummary.HasDifferences()
 	return
 }
 
-func compareFiles(filesToCompare []summary.FileTuple) (filesDiffs []summary.FileTuple) {
+func compareFiles(prefix string, filesToCompare []summary.FileTuple) (filesDiffs []summary.FileTuple, comparedFiles []string) {
 	for _, tuple := range filesToCompare {
+		comparedFiles = append(comparedFiles, strings.TrimPrefix(tuple.LeftFile, prefix))
 		if !deepCompare(tuple.LeftFile, tuple.RightFile) {
 			filesDiffs = append(filesDiffs, tuple)
 		}
