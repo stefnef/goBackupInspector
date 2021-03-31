@@ -12,8 +12,9 @@
 <body>
 <div class="container-fluid">
     <div class="row">
-        <ul class="list-group  collapse in"  id="MissingFilesLeft">
+        <ul class="list-group  collapse in">
             <li class="list-group-item">Backup File: {{.BackupFileName}}</li>
+            <li class="list-group-item">System Directory: {{.RightDir}}</li>
             <li class="list-group-item">Creation Date: {{ .Date.Format "02.01.2006"}}</li>
             <li class="list-group-item">With Differences: {{.WithDifferences}}</li>
         </ul>
@@ -22,7 +23,7 @@
         <h2>Missing Files/Directories</h2>
         <div class="col-sm-6">
             <div class="container-fluid">
-                <h3>Backup directory: {{ .LeftDir }}</h3>
+                <h3>Backup directory: </h3>
                 <div class="container-fluid" data-toggle="collapse" data-target="#MissingFilesLeft">
                     {{ if gt $lengthFilesNotInLeftDir 0 }}
                         <h4>These files are missing in backup</h4>
@@ -52,7 +53,7 @@
         </div>
         <div class="col-sm-6">
             <div class="container-fluid">
-                <h3>System directory: {{ .RightDir }}</h3>
+                <h3>System directory:</h3>
                 <div class="container-fluid" data-toggle="collapse" data-target="#MissingFilesRight">
                     {{ if gt $lengthFilesNotInRightDir 0 }}
                         <h4>These files are missing in current system</h4>
