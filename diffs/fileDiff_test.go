@@ -155,7 +155,7 @@ func TestFileDiff(t *testing.T) {
 		UnequalFiles: []summary.FileTuple{
 			{BackupFile: "/dir1/dir4/f6.txt", SystemFile: "/dir1/dir4/f6.txt"},
 		},
-		IgnoredElement: []summary.IgnoredElement{
+		IgnoredElements: []summary.IgnoredElement{
 			{IgnoredElement: summary.DirBackup + ": /dir2/dir6/f8.txt", CausedRule: "dir2/dir6/"},
 			{IgnoredElement: summary.DirBackup + ": /dir2/dir6", CausedRule: "dir2/dir6/"},
 			{IgnoredElement: summary.DirSystem + ": /dir2/dir6/f8.txt", CausedRule: "dir2/dir6/"},
@@ -176,7 +176,7 @@ func TestDeletePaths(t *testing.T) {
 			summary.DirSystem: {"LEFT/DIR/notInSystem"},
 		},
 		ComparedFiles: []string{"LEFT/DIR/file1", "RIGHT/DIR/file2"},
-		IgnoredElement: []summary.IgnoredElement{
+		IgnoredElements: []summary.IgnoredElement{
 			{IgnoredElement: "LEFT/DIR/backupIgnore"},
 			{IgnoredElement: "RIGHT/DIR/sysIgnore"}},
 		UnequalFiles: []summary.FileTuple{
@@ -196,7 +196,7 @@ func TestDeletePaths(t *testing.T) {
 			summary.DirSystem: {"notInSystem"},
 		},
 		ComparedFiles: []string{"file1", "file2"},
-		IgnoredElement: []summary.IgnoredElement{
+		IgnoredElements: []summary.IgnoredElement{
 			{IgnoredElement: summary.DirBackup + ": backupIgnore"},
 			{IgnoredElement: summary.DirSystem + ": sysIgnore"}},
 		UnequalFiles: []summary.FileTuple{

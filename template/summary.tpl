@@ -6,7 +6,7 @@
 {{ $lengthDirsNotInLeftDir := ShowDirsNotInLeftDir . | len}}
 {{ $lengthDirsNotInRightDir := ShowDirsNotInRightDir . | len}}
 {{ $lengthUnequalFiles := len .UnequalFiles }}
-{{ $lengthIgnoredElements := len .IgnoredElement }}
+{{ $lengthIgnoredElements := len .IgnoredElements }}
 {{ $lengthComparedFiles := len .ComparedFiles }}
 <h1>Summary Of Comparison</h1>
 <body>
@@ -103,7 +103,7 @@
             {{ if gt $lengthIgnoredElements 0 }}
             <h2 data-toggle="collapse" data-target="#IgnoredElements">Ignored elements:</h2>
             <ul class="list-group  collapse"  id="IgnoredElements">
-                {{ range .IgnoredElement }}
+                {{ range .IgnoredElements }}
                     <li class="list-group-item">{{ . }}</li>
                 {{end}}
             </ul>

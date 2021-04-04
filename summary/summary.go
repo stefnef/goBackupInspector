@@ -35,7 +35,7 @@ type FileTuple struct {
 }
 
 type IgnoredElement struct {
-	IgnoredElement string `json:"IgnoredElement"`
+	IgnoredElement string `json:"IgnoredElements"`
 	CausedRule     string `json:"CausedRule"`
 }
 
@@ -46,7 +46,7 @@ type FileDiffSummary struct {
 	FilesNotInDir       map[string][]string `json:"FilesNotInDir"`
 	DirectoriesNotInDir map[string][]string `json:"DirectoriesNotInDir"`
 	ComparedFiles       []string            `json:"ComparedFiles"`
-	IgnoredElement      []IgnoredElement    `json:"IgnoredElements"` //TODO plural
+	IgnoredElements     []IgnoredElement    `json:"IgnoredElements"`
 	UnequalFiles        []FileTuple         `json:"UnequalFiles"`
 	WithDifferences     bool                `json:"WithDifferences"`
 	BackupFileName      string              `json:"BackupFileName"`
@@ -126,7 +126,7 @@ func (sum FileDiffSummary) Compare(other FileDiffSummary) int {
 	if Compare(sum.UnequalFiles, other.UnequalFiles) != 0 {
 		return DiffUnequalFiles.i()
 	}
-	if CompareIgnoredElements(sum.IgnoredElement, other.IgnoredElement) != 0 {
+	if CompareIgnoredElements(sum.IgnoredElements, other.IgnoredElements) != 0 {
 		return DiffIgnoredFiles.i()
 	}
 	if sum.WithDifferences != other.WithDifferences {

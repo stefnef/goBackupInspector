@@ -29,10 +29,10 @@ func TestCompare(t *testing.T) {
 	assertCompare(diffSummary, other, DiffUnequalFiles.i(), t)
 
 	other.UnequalFiles = diffSummary.UnequalFiles
-	diffSummary.IgnoredElement = []IgnoredElement{{IgnoredElement: "file", CausedRule: "rule"}}
+	diffSummary.IgnoredElements = []IgnoredElement{{IgnoredElement: "file", CausedRule: "rule"}}
 	assertCompare(diffSummary, other, DiffIgnoredFiles.i(), t)
 
-	other.IgnoredElement = diffSummary.IgnoredElement
+	other.IgnoredElements = diffSummary.IgnoredElements
 	diffSummary.WithDifferences = true
 	assertCompare(diffSummary, other, DiffWithDifferences.i(), t)
 

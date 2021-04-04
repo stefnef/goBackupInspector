@@ -78,7 +78,7 @@ func fileDiff(dumpDir, sysDir, diffIgnoreFile string) (diffSummary summary.FileD
 			summary.DirSystem: make([]string, 0),
 		},
 		ComparedFiles: []string{}, UnequalFiles: []summary.FileTuple{},
-		IgnoredElement: ignoredElements}
+		IgnoredElements: ignoredElements}
 	filesToCompare, diffSummary.FilesNotInDir[summary.DirSystem] = findCuts(dumpDir, dumpFiles, sysDir, sysFiles)
 	_, diffSummary.FilesNotInDir[summary.DirBackup] = findCuts(sysDir, sysFiles, dumpDir, dumpFiles)
 	_, diffSummary.DirectoriesNotInDir[summary.DirSystem] = findCuts(dumpDir, dirsInDump, sysDir, dirsInSys)
@@ -115,13 +115,13 @@ func deletePrefixes(diff *summary.FileDiffSummary) {
 	}
 
 	// ignored elements
-	for idx, element := range diff.IgnoredElement {
+	for idx, element := range diff.IgnoredElements {
 		if strings.HasPrefix(element.IgnoredElement, diff.BackupDir) {
 			element.IgnoredElement = summary.DirBackup + ": " + strings.TrimPrefix(element.IgnoredElement, diff.BackupDir)
 		} else {
 			element.IgnoredElement = summary.DirSystem + ": " + strings.TrimPrefix(element.IgnoredElement, diff.SystemDir)
 		}
-		diff.IgnoredElement[idx].IgnoredElement = element.IgnoredElement
+		diff.IgnoredElements[idx].IgnoredElement = element.IgnoredElement
 	}
 
 	// unequal files
