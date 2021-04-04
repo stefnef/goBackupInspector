@@ -42,8 +42,8 @@ func createExampleSummary() *summary.FileDiffSummary {
 			{IgnoredElement: "Ign1", CausedRule: "Cause1"}, {IgnoredElement: "Ignore2", CausedRule: "C2"},
 		},
 		UnequalFiles: []summary.FileTuple{
-			{LeftFile: "Left1", RightFile: "Right1"}, {LeftFile: "Left2", RightFile: "Right2"},
-			{LeftFile: "Left3", RightFile: "Right3"},
+			{BackupFile: "Left1", SystemFile: "Right1"}, {BackupFile: "Left2", SystemFile: "Right2"},
+			{BackupFile: "Left3", SystemFile: "Right3"},
 		},
 		WithDifferences: true,
 		BackupFileName:  "BackupFile.tar.gz",

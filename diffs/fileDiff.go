@@ -126,15 +126,15 @@ func deletePrefixes(diff *summary.FileDiffSummary) {
 
 	// unequal files
 	for idx, element := range diff.UnequalFiles {
-		diff.UnequalFiles[idx].LeftFile = strings.TrimPrefix(element.LeftFile, diff.BackupDir)
-		diff.UnequalFiles[idx].RightFile = strings.TrimPrefix(element.RightFile, diff.SystemDir)
+		diff.UnequalFiles[idx].BackupFile = strings.TrimPrefix(element.BackupFile, diff.BackupDir)
+		diff.UnequalFiles[idx].SystemFile = strings.TrimPrefix(element.SystemFile, diff.SystemDir)
 	}
 }
 
 func compareFiles(filesToCompare []summary.FileTuple) (filesDiffs []summary.FileTuple, comparedFiles []string) {
 	for _, tuple := range filesToCompare {
-		comparedFiles = append(comparedFiles, tuple.LeftFile)
-		if !deepCompare(tuple.LeftFile, tuple.RightFile) {
+		comparedFiles = append(comparedFiles, tuple.BackupFile)
+		if !deepCompare(tuple.BackupFile, tuple.SystemFile) {
 			filesDiffs = append(filesDiffs, tuple)
 		}
 	}
@@ -188,7 +188,7 @@ func findCuts(leftRootDir string, leftFilesNames []string, rightRootDir string, 
 	filesNotInRightDir = make([]string, 0)
 	for _, leftFile := range leftFilesNames {
 		if rightFile := findFileWithName(leftFile, leftRootDir, rightFileNames, rightRootDir); rightFile != "" {
-			filesToCompare = append(filesToCompare, summary.FileTuple{LeftFile: leftFile, RightFile: rightFile})
+			filesToCompare = append(filesToCompare, summary.FileTuple{BackupFile: leftFile, SystemFile: rightFile})
 		} else {
 			filesNotInRightDir = append(filesNotInRightDir, leftFile)
 		}

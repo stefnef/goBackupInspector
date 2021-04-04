@@ -122,7 +122,7 @@ func TestFindCuts(t *testing.T) {
 
 	right := []string{"right/file0", "right/file1"}
 	var filesToCompare []summary.FileTuple
-	compareExp := summary.FileTuple{LeftFile: "left/file1", RightFile: "right/file1"}
+	compareExp := summary.FileTuple{BackupFile: "left/file1", SystemFile: "right/file1"}
 	var filesNotInRightDir []string
 
 	filesToCompare, filesNotInRightDir = findCuts("left", left, "right", right)
@@ -153,7 +153,7 @@ func TestFileDiff(t *testing.T) {
 		ComparedFiles: []string{"/dir1/dir4/f5.txt", "/dir1/dir4/f6.txt", "/dir3/f1.txt",
 			"/dir3/f2.txt", "/dir3/f3.txt"},
 		UnequalFiles: []summary.FileTuple{
-			{LeftFile: "/dir1/dir4/f6.txt", RightFile: "/dir1/dir4/f6.txt"},
+			{BackupFile: "/dir1/dir4/f6.txt", SystemFile: "/dir1/dir4/f6.txt"},
 		},
 		IgnoredElement: []summary.IgnoredElement{
 			{IgnoredElement: summary.DirBackup + ": /dir2/dir6/f8.txt", CausedRule: "dir2/dir6/"},
@@ -180,7 +180,7 @@ func TestDeletePaths(t *testing.T) {
 			{IgnoredElement: "LEFT/DIR/backupIgnore"},
 			{IgnoredElement: "RIGHT/DIR/sysIgnore"}},
 		UnequalFiles: []summary.FileTuple{
-			{LeftFile: "LEFT/DIR/leftFile", RightFile: "RIGHT/DIR/rightFile"},
+			{BackupFile: "LEFT/DIR/leftFile", SystemFile: "RIGHT/DIR/rightFile"},
 		},
 	}
 
@@ -200,7 +200,7 @@ func TestDeletePaths(t *testing.T) {
 			{IgnoredElement: summary.DirBackup + ": backupIgnore"},
 			{IgnoredElement: summary.DirSystem + ": sysIgnore"}},
 		UnequalFiles: []summary.FileTuple{
-			{LeftFile: "leftFile", RightFile: "rightFile"},
+			{BackupFile: "leftFile", SystemFile: "rightFile"},
 		},
 	}
 

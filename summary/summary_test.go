@@ -25,7 +25,7 @@ func TestCompare(t *testing.T) {
 	assertCompare(diffSummary, other, DiffComparedFiles.i(), t)
 
 	other.ComparedFiles = diffSummary.ComparedFiles
-	diffSummary.UnequalFiles = []FileTuple{{LeftFile: "left", RightFile: "right"}}
+	diffSummary.UnequalFiles = []FileTuple{{BackupFile: "left", SystemFile: "right"}}
 	assertCompare(diffSummary, other, DiffUnequalFiles.i(), t)
 
 	other.UnequalFiles = diffSummary.UnequalFiles

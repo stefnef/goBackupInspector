@@ -30,8 +30,8 @@ func (d Difference) i() int {
 }
 
 type FileTuple struct {
-	LeftFile  string `json:"left_file"`
-	RightFile string `json:"right_file"`
+	BackupFile string `json:"BackupFile"`
+	SystemFile string `json:"SystemFile"`
 }
 
 type IgnoredElement struct {
@@ -53,17 +53,17 @@ type FileDiffSummary struct {
 }
 
 func (ft FileTuple) Compare(other FileTuple) int {
-	if ft.LeftFile != other.LeftFile {
+	if ft.BackupFile != other.BackupFile {
 		return -1
 	}
-	if ft.RightFile != other.RightFile {
+	if ft.SystemFile != other.SystemFile {
 		return 1
 	}
 	return 0
 }
 
 func (ft FileTuple) String() string {
-	return "{LF '" + ft.LeftFile + "', RF '" + ft.RightFile + "'}"
+	return "{LF '" + ft.BackupFile + "', RF '" + ft.SystemFile + "'}"
 }
 
 func Compare(sum, other []FileTuple) int {

@@ -29,7 +29,7 @@ func CreateHTMLFile(sum *summary.FileDiffSummary, templatePath string) (fileName
 			return innerSum.DirectoriesNotInDir[summary.DirSystem]
 		},
 		"LeftWithoutPath": func(tuple summary.FileTuple) string {
-			return strings.TrimPrefix(tuple.LeftFile, sum.BackupDir)
+			return strings.TrimPrefix(tuple.BackupFile, sum.BackupDir)
 		},
 	}).ParseFiles(templatePath+"summary.tpl", templatePath+"header.tpl",
 		templatePath+"footer.tpl", templatePath+"notInDir.tpl")
