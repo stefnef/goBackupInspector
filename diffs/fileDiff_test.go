@@ -144,27 +144,67 @@ func TestFileDiff(t *testing.T) {
 		LeftDir:  "../test/dump",
 		RightDir: "../test/sys",
 		FilesNotInDir: map[string][]string{
-			summary.DirBackup: {"../test/sys/dir2/dir5/f7.txt", "../test/sys/dir4/f10.txt"},
-			summary.DirSystem: {"../test/dump/dir3/f4.txt"}},
+			summary.DirBackup: {"/dir2/dir5/f7.txt", "/dir4/f10.txt"},
+			summary.DirSystem: {"/dir3/f4.txt"}},
 		DirectoriesNotInDir: map[string][]string{
-			summary.DirBackup: {"../test/sys/dir4"},
+			summary.DirBackup: {"/dir4"},
 			summary.DirSystem: {},
 		},
 		ComparedFiles: []string{"/dir1/dir4/f5.txt", "/dir1/dir4/f6.txt", "/dir3/f1.txt",
 			"/dir3/f2.txt", "/dir3/f3.txt"},
 		UnequalFiles: []summary.FileTuple{
-			{LeftFile: "../test/dump/dir1/dir4/f6.txt", RightFile: "../test/sys/dir1/dir4/f6.txt"},
+			{LeftFile: "/dir1/dir4/f6.txt", RightFile: "/dir1/dir4/f6.txt"},
 		},
 		IgnoredElement: []summary.IgnoredElement{
-			{IgnoredElement: "../test/dump/dir2/dir6/f8.txt", CausedRule: "dir2/dir6/"},
-			{IgnoredElement: "../test/dump/dir2/dir6", CausedRule: "dir2/dir6/"},
-			{IgnoredElement: "../test/sys/dir2/dir6/f8.txt", CausedRule: "dir2/dir6/"},
-			{IgnoredElement: "../test/sys/dir2/dir6", CausedRule: "dir2/dir6/"},
+			{IgnoredElement: summary.DirBackup + ": /dir2/dir6/f8.txt", CausedRule: "dir2/dir6/"},
+			{IgnoredElement: summary.DirBackup + ": /dir2/dir6", CausedRule: "dir2/dir6/"},
+			{IgnoredElement: summary.DirSystem + ": /dir2/dir6/f8.txt", CausedRule: "dir2/dir6/"},
+			{IgnoredElement: summary.DirSystem + ": /dir2/dir6", CausedRule: "dir2/dir6/"},
 		},
 		WithDifferences: true,
 	}
 	diffSummary = fileDiff("../test/dump", "../test/sys", "../test/diffIgnore")
 	assertSummary(diffSummary, summaryExp, t)
+}
+
+func TestDeletePaths(t *testing.T) {
+	diff := summary.FileDiffSummary{LeftDir: "LEFT/DIR/",
+		RightDir: "RIGHT/DIR/",
+		FilesNotInDir: map[string][]string{summary.DirBackup: {"RIGHT/DIR/notInLEFTDir"},
+			summary.DirSystem: {"LEFT/DIR/notInRIGHTDir"}},
+		DirectoriesNotInDir: map[string][]string{summary.DirBackup: {"RIGHT/DIR/notInBackup"},
+			summary.DirSystem: {"LEFT/DIR/notInSystem"},
+		},
+		ComparedFiles: []string{"LEFT/DIR/file1", "RIGHT/DIR/file2"},
+		IgnoredElement: []summary.IgnoredElement{
+			{IgnoredElement: "LEFT/DIR/backupIgnore"},
+			{IgnoredElement: "RIGHT/DIR/sysIgnore"}},
+		UnequalFiles: []summary.FileTuple{
+			{LeftFile: "LEFT/DIR/leftFile", RightFile: "RIGHT/DIR/rightFile"},
+		},
+	}
+
+	deletePrefixes(&diff)
+
+	diffExp := summary.FileDiffSummary{LeftDir: "LEFT/DIR/",
+		RightDir: "RIGHT/DIR/",
+		FilesNotInDir: map[string][]string{
+			summary.DirBackup: {"notInLEFTDir"},
+			summary.DirSystem: {"notInRIGHTDir"}},
+		DirectoriesNotInDir: map[string][]string{
+			summary.DirBackup: {"notInBackup"},
+			summary.DirSystem: {"notInSystem"},
+		},
+		ComparedFiles: []string{"file1", "file2"},
+		IgnoredElement: []summary.IgnoredElement{
+			{IgnoredElement: summary.DirBackup + ": backupIgnore"},
+			{IgnoredElement: summary.DirSystem + ": sysIgnore"}},
+		UnequalFiles: []summary.FileTuple{
+			{LeftFile: "leftFile", RightFile: "rightFile"},
+		},
+	}
+
+	assertSummary(diff, diffExp, t)
 }
 
 func TestCreateFileDiff(t *testing.T) {

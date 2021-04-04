@@ -83,14 +83,57 @@ func fileDiff(dumpDir, sysDir, diffIgnoreFile string) (diffSummary summary.FileD
 	_, diffSummary.FilesNotInDir[summary.DirBackup] = findCuts(sysDir, sysFiles, dumpDir, dumpFiles)
 	_, diffSummary.DirectoriesNotInDir[summary.DirSystem] = findCuts(dumpDir, dirsInDump, sysDir, dirsInSys)
 	_, diffSummary.DirectoriesNotInDir[summary.DirBackup] = findCuts(sysDir, dirsInSys, dumpDir, dirsInDump)
-	diffSummary.UnequalFiles, diffSummary.ComparedFiles = compareFiles(dumpDir, filesToCompare)
+	diffSummary.UnequalFiles, diffSummary.ComparedFiles = compareFiles(filesToCompare)
 	diffSummary.WithDifferences = diffSummary.HasDifferences()
+	deletePrefixes(&diffSummary)
 	return
 }
 
-func compareFiles(prefix string, filesToCompare []summary.FileTuple) (filesDiffs []summary.FileTuple, comparedFiles []string) {
+//deletePrefixes Deletes backup and system paths from file names
+func deletePrefixes(diff *summary.FileDiffSummary) {
+	// files not in backup/system
+	for idx, element := range diff.FilesNotInDir[summary.DirBackup] {
+		diff.FilesNotInDir[summary.DirBackup][idx] = strings.TrimPrefix(element, diff.RightDir)
+	}
+	for idx, element := range diff.FilesNotInDir[summary.DirSystem] {
+		diff.FilesNotInDir[summary.DirSystem][idx] = strings.TrimPrefix(element, diff.LeftDir)
+	}
+
+	// directories not in backup/system
+	for idx, element := range diff.DirectoriesNotInDir[summary.DirBackup] {
+		diff.DirectoriesNotInDir[summary.DirBackup][idx] = strings.TrimPrefix(element, diff.RightDir)
+	}
+	for idx, element := range diff.DirectoriesNotInDir[summary.DirSystem] {
+		diff.DirectoriesNotInDir[summary.DirSystem][idx] = strings.TrimPrefix(element, diff.LeftDir)
+	}
+
+	// compared files
+	for idx, element := range diff.ComparedFiles {
+		noPrefix := strings.TrimPrefix(element, diff.LeftDir)
+		noPrefix = strings.TrimPrefix(noPrefix, diff.RightDir)
+		diff.ComparedFiles[idx] = noPrefix
+	}
+
+	// ignored elements
+	for idx, element := range diff.IgnoredElement {
+		if strings.HasPrefix(element.IgnoredElement, diff.LeftDir) {
+			element.IgnoredElement = summary.DirBackup + ": " + strings.TrimPrefix(element.IgnoredElement, diff.LeftDir)
+		} else {
+			element.IgnoredElement = summary.DirSystem + ": " + strings.TrimPrefix(element.IgnoredElement, diff.RightDir)
+		}
+		diff.IgnoredElement[idx].IgnoredElement = element.IgnoredElement
+	}
+
+	// unequal files
+	for idx, element := range diff.UnequalFiles {
+		diff.UnequalFiles[idx].LeftFile = strings.TrimPrefix(element.LeftFile, diff.LeftDir)
+		diff.UnequalFiles[idx].RightFile = strings.TrimPrefix(element.RightFile, diff.RightDir)
+	}
+}
+
+func compareFiles(filesToCompare []summary.FileTuple) (filesDiffs []summary.FileTuple, comparedFiles []string) {
 	for _, tuple := range filesToCompare {
-		comparedFiles = append(comparedFiles, strings.TrimPrefix(tuple.LeftFile, prefix))
+		comparedFiles = append(comparedFiles, tuple.LeftFile)
 		if !deepCompare(tuple.LeftFile, tuple.RightFile) {
 			filesDiffs = append(filesDiffs, tuple)
 		}
