@@ -41,8 +41,8 @@ type IgnoredElement struct {
 
 type FileDiffSummary struct {
 	Date                time.Time           `json:"Date"`
-	LeftDir             string              `json:"LeftDir"`
-	RightDir            string              `json:"RightDir"`
+	BackupDir           string              `json:"BackupDir"`
+	SystemDir           string              `json:"SystemDir"`
 	FilesNotInDir       map[string][]string `json:"FilesNotInDir"`
 	DirectoriesNotInDir map[string][]string `json:"DirectoriesNotInDir"`
 	ComparedFiles       []string            `json:"ComparedFiles"`
@@ -108,10 +108,10 @@ func CompareIgnoredElements(act, exp []IgnoredElement) int {
 }
 
 func (sum FileDiffSummary) Compare(other FileDiffSummary) int {
-	if sum.LeftDir != other.LeftDir {
+	if sum.BackupDir != other.BackupDir {
 		return DiffLeftDir.i()
 	}
-	if sum.RightDir != other.RightDir {
+	if sum.SystemDir != other.SystemDir {
 		return DiffRightDir.i()
 	}
 	if eq := reflect.DeepEqual(sum.FilesNotInDir, other.FilesNotInDir); !eq {

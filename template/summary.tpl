@@ -1,6 +1,6 @@
 {{template "header"}}
-{{$LeftDir := .LeftDir}}
-{{$RightDir := .RightDir}}
+{{$BackupDir := .BackupDir}}
+{{$SystemDir := .SystemDir}}
 {{ $lengthFilesNotInLeftDir := ShowFilesNotInLeftDir . | len}}
 {{ $lengthFilesNotInRightDir := ShowFilesNotInRightDir . | len}}
 {{ $lengthDirsNotInLeftDir := ShowDirsNotInLeftDir . | len}}
@@ -14,7 +14,7 @@
     <div class="row">
         <ul class="list-group  collapse in">
             <li class="list-group-item">Backup File: {{.BackupFileName}}</li>
-            <li class="list-group-item">System Directory: {{.RightDir}}</li>
+            <li class="list-group-item">System Directory: {{.SystemDir}}</li>
             <li class="list-group-item">Creation Date: {{ .Date.Format "02.01.2006"}}</li>
             <li class="list-group-item">With Differences: {{.WithDifferences}}</li>
         </ul>

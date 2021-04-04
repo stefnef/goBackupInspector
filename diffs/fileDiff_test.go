@@ -141,8 +141,8 @@ func TestFindCuts(t *testing.T) {
 func TestFileDiff(t *testing.T) {
 	var diffSummary summary.FileDiffSummary
 	summaryExp := summary.FileDiffSummary{
-		LeftDir:  "../test/dump",
-		RightDir: "../test/sys",
+		BackupDir: "../test/dump",
+		SystemDir: "../test/sys",
 		FilesNotInDir: map[string][]string{
 			summary.DirBackup: {"/dir2/dir5/f7.txt", "/dir4/f10.txt"},
 			summary.DirSystem: {"/dir3/f4.txt"}},
@@ -168,8 +168,8 @@ func TestFileDiff(t *testing.T) {
 }
 
 func TestDeletePaths(t *testing.T) {
-	diff := summary.FileDiffSummary{LeftDir: "LEFT/DIR/",
-		RightDir: "RIGHT/DIR/",
+	diff := summary.FileDiffSummary{BackupDir: "LEFT/DIR/",
+		SystemDir: "RIGHT/DIR/",
 		FilesNotInDir: map[string][]string{summary.DirBackup: {"RIGHT/DIR/notInLEFTDir"},
 			summary.DirSystem: {"LEFT/DIR/notInRIGHTDir"}},
 		DirectoriesNotInDir: map[string][]string{summary.DirBackup: {"RIGHT/DIR/notInBackup"},
@@ -186,8 +186,8 @@ func TestDeletePaths(t *testing.T) {
 
 	deletePrefixes(&diff)
 
-	diffExp := summary.FileDiffSummary{LeftDir: "LEFT/DIR/",
-		RightDir: "RIGHT/DIR/",
+	diffExp := summary.FileDiffSummary{BackupDir: "LEFT/DIR/",
+		SystemDir: "RIGHT/DIR/",
 		FilesNotInDir: map[string][]string{
 			summary.DirBackup: {"notInLEFTDir"},
 			summary.DirSystem: {"notInRIGHTDir"}},

@@ -28,9 +28,9 @@ func TestTransform(t *testing.T) {
 
 func createExampleSummary() *summary.FileDiffSummary {
 	return &summary.FileDiffSummary{
-		Date:     time.Now(),
-		LeftDir:  "LeftDir",
-		RightDir: "RightDir",
+		Date:      time.Now(),
+		BackupDir: "BackupDir",
+		SystemDir: "SystemDir",
 		FilesNotInDir: map[string][]string{
 			summary.DirBackup: {"../File1", "../File2"},
 			summary.DirSystem: {"../../Right3"}},

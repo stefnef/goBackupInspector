@@ -3,16 +3,16 @@ package summary
 import "testing"
 
 func TestCompare(t *testing.T) {
-	diffSummary := FileDiffSummary{LeftDir: "NotEqual"}
-	other := FileDiffSummary{LeftDir: "../test/dump"}
+	diffSummary := FileDiffSummary{BackupDir: "NotEqual"}
+	other := FileDiffSummary{BackupDir: "../test/dump"}
 	assertCompare(diffSummary, other, DiffLeftDir.i(), t)
 
-	other.LeftDir = diffSummary.LeftDir
-	diffSummary.RightDir = "RightDir"
-	other.RightDir = "other"
+	other.BackupDir = diffSummary.BackupDir
+	diffSummary.SystemDir = "SystemDir"
+	other.SystemDir = "other"
 	assertCompare(diffSummary, other, DiffRightDir.i(), t)
 
-	other.RightDir = diffSummary.RightDir
+	other.SystemDir = diffSummary.SystemDir
 	diffSummary.FilesNotInDir = map[string][]string{DirBackup: {"Not in dir"}}
 	assertCompare(diffSummary, other, DiffFilesNotInDir.i(), t)
 
