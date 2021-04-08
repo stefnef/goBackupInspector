@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"reflect"
 )
 
 const summaryFileName = "lastSummary.json"
@@ -27,7 +28,20 @@ func WithUserNotification(sum summary.FileDiffSummary, sumPath string) bool {
 		return true
 	}
 
-	return sum.Compare(*other) != int(summary.Equal)
+	if eq := reflect.DeepEqual(sum.FilesNotInDir, other.FilesNotInDir); !eq {
+		return true
+	}
+	if eq := reflect.DeepEqual(sum.DirectoriesNotInDir, other.DirectoriesNotInDir); !eq {
+		return true
+	}
+	if summary.Compare(sum.UnequalFiles, other.UnequalFiles) != 0 {
+		return true
+	}
+	if sum.BackupFileName != other.BackupFileName {
+		return true
+	}
+
+	return false
 }
 
 func readSummary(sumPath string) (sum *summary.FileDiffSummary, err error) {
